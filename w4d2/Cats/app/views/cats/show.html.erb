@@ -1,0 +1,25 @@
+
+<li><%= link_to "All", cats_url %></li>
+<table>
+  <caption> <%= @cat.name %> </caption>
+  <tr>
+    <th>attributes</th>
+    <th>values</th>
+  </tr>
+  <tr>
+    <td> Age </td>
+    <td> <%= @cat.age %> </td>
+  </tr>
+  <tr>
+    <td> Birth Date </td>
+    <td> <%= @cat.birth_date %> </td>
+  </tr>
+  <tr>
+    <td> Color </td>
+    <td> <%= @cat.color %> </td>
+  </tr>
+  <tr>
+    <td> Sex </td>
+    <td> <%= @cat.sex %> </td>
+  </tr>
+</table>
