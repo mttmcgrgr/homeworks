@@ -16,6 +16,29 @@ class BinarySearchTree
 
   end
 
+  def breadth_first_search(item)
+   queue = [@root]
+
+   while !queue.empty?
+     current_node = queue.shift
+     return current_node if current_node.value == item
+     queue.unshift(current_node.left_child) if !current_node.left_child.nil?
+     queue.unshift(current_node.right_child) if !current_node.right_child.nil?
+   end
+   puts "Item not found"
+   return nil
+ end
+
+ def dfs_rec(item, node = @root)
+
+    return nil if node.nil?
+    return node if node.value == item
+
+    left_node = dfs_rec(item, node.left_child)
+    right_node = dfs_rec(item, node.right_child)
+
+  end
+
   def insert(value)
     if @root == nil
       BSTNode.new(value)
