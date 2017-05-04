@@ -10859,6 +10859,10 @@ module.exports = __webpack_require__(113);
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = __webpack_require__(86);
@@ -10877,32 +10881,135 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Root = function (_React$Component) {
-  _inherits(Root, _React$Component);
+var Clock = function (_React$Component) {
+  _inherits(Clock, _React$Component);
 
-  function Root() {
-    _classCallCheck(this, Root);
+  function Clock(props) {
+    _classCallCheck(this, Clock);
 
-    return _possibleConstructorReturn(this, (Root.__proto__ || Object.getPrototypeOf(Root)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (Clock.__proto__ || Object.getPrototypeOf(Clock)).call(this, props));
+
+    var currentTime = new Date();
+    var isAm = currentTime.getHours() < 12 ? true : false;
+    var hour = currentTime.getHours();
+    if (hour === 0) {
+      hour = 12;
+    } else if (hour > 12) {
+      hour -= 12;
+    }
+    _this.state = {
+      hour: hour,
+      min: currentTime.getMinutes(),
+      sec: currentTime.getSeconds(),
+      isAm: isAm
+    };
+
+    _this.incrementTime();
+    return _this;
   }
 
-  _createClass(Root, [{
+  _createClass(Clock, [{
+    key: 'pad',
+    value: function pad(num) {
+      if (num < 10) {
+        return "0" + num;
+      }
+      return num;
+    }
+  }, {
+    key: 'incrementTime',
+    value: function incrementTime() {
+      setInterval(this.incrementSeconds.bind(this), 1000);
+    }
+  }, {
+    key: 'incrementSeconds',
+    value: function incrementSeconds() {
+      var sec = this.state.sec;
+
+      if (sec < 59) {
+        this.setState({ sec: sec += 1 });
+      } else if (sec === 59) {
+        this.setState({ sec: 0 });
+        this.incrementMinutes();
+      }
+    }
+  }, {
+    key: 'incrementMinutes',
+    value: function incrementMinutes() {
+      var min = this.state.min;
+
+      if (min < 59) {
+        this.setState({ min: min += 1 });
+      } else {
+        this.setState({ min: 0 });
+        this.incrementHours();
+      }
+    }
+  }, {
+    key: 'incrementHours',
+    value: function incrementHours() {
+      var hour = this.state.hour;
+
+      if (hour < 12) {
+        if (hour === 11) {
+          this.flipAmPm();
+        }
+        this.setState({ hour: hour += 1 });
+      } else if (hour === 12) {
+        this.setState({ hour: 1 });
+      }
+    }
+  }, {
+    key: 'flipAmPm',
+    value: function flipAmPm() {
+      this.setState({ isAm: !this.state.isAm });
+    }
+  }, {
+    key: 'amOrPm',
+    value: function amOrPm() {
+      if (this.state.isAm) {
+        return "AM";
+      }
+      return "PM";
+    }
+  }, {
     key: 'render',
     value: function render() {
-
       return _react2.default.createElement(
-        'div',
-        null,
-        'React is up and running!'
+        'main',
+        { className: 'clock' },
+        _react2.default.createElement(
+          'div',
+          { className: 'hour' },
+          this.pad(this.state.hour)
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'minute' },
+          this.pad(this.state.min)
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'second' },
+          this.pad(this.state.sec)
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'am-pm' },
+          this.amOrPm()
+        )
       );
     }
   }]);
 
-  return Root;
+  return Clock;
 }(_react2.default.Component);
 
+exports.default = Clock;
+
+
 document.addEventListener('DOMContentLoaded', function () {
-  _reactDom2.default.render(_react2.default.createElement(Root, null), document.getElementById('main'));
+  _reactDom2.default.render(_react2.default.createElement(Clock, null), document.getElementById('main'));
 });
 
 //let time = new Date().split(":");
